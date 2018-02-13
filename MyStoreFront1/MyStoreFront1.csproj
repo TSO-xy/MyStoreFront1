@@ -51,4 +51,7 @@
   <ItemGroup>
     <None Remove=".bowerrc" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Products\" />
+  </ItemGroup>
 </Project>
