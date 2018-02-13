@@ -11,9 +11,46 @@ namespace MyStoreFront1.Controllers
     public class ProductsController : Controller
     {
         // GET: /<controller>/
-        public IActionResult Index()
+        public IActionResult Index(string id)
         {
-            return View();
+            if (id == "1")
+            {
+                Models.ProductsViewModel model1 = new Models.ProductsViewModel();
+                model1.ID = 1;
+                model1.Name = "Jazz Pack";
+                model1.Price = 39.99m;
+                model1.Genre = "Jazz";
+                model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
+                model1.ImageUrl = "/images/jazz.jpg";
+
+                return View(model1);
+            }
+
+            if (id == "2")
+            {
+                Models.ProductsViewModel model2 = new Models.ProductsViewModel();
+                model2.ID = 2;
+                model2.Name = "Rock Pack";
+                model2.Price = 29.99m;
+                model2.Genre = "Rock";
+                model2.Description = "Recreate the rugged sound of Rock music.";
+                model2.ImageUrl = "/images/Rock.jpg";
+
+                return View(model2);
+            }
+
+            else
+            {
+                Models.ProductsViewModel model1 = new Models.ProductsViewModel();
+                model1.ID = 1;
+                model1.Name = "Jazz Pack";
+                model1.Price = 39.99m;
+                model1.Genre = "Jazz";
+                model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
+                model1.ImageUrl = "/images/jazz.jpg";
+                return View();
+            }
+
         }
     }
 }
