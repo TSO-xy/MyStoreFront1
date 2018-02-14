@@ -53,5 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Products\" />
+    <Folder Include="Views\Order\" />
+    <Folder Include="Views\Shipping\" />
+    <Folder Include="Views\Billing\" />
   </ItemGroup>
 </Project>

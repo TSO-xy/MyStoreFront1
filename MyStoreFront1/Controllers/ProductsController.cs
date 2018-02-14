@@ -10,7 +10,15 @@ namespace MyStoreFront1.Controllers
 {
     public class ProductsController : Controller
     {
-        // GET: /<controller>/
+        Models.ProductsViewModel productArray = new  
+        //ProductViewModel[] productArray = new ProductViewModel[2];
+
+        //// GET: /<controller>/
+        //public IActionResult Index(productArray)
+        //{
+        //    return View();
+        //}
+
         public IActionResult Index(string id)
         {
             if (id == "1")
@@ -48,7 +56,7 @@ namespace MyStoreFront1.Controllers
                 model1.Genre = "Jazz";
                 model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
                 model1.ImageUrl = "/images/jazz.jpg";
-                return View();
+                return View(model1);
             }
 
         }

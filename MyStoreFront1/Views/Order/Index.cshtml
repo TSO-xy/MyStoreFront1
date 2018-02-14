@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model MyStoreFront1.Models.ProductsViewModel;
+
+@{
+}
+<h1>Your Order</h1>
+<form class="container" method="post">
+    <div class="row">
+        <img src="/images/jazz.jpg" class="col-3 img-fluid" style="height: 25%">
+        <div class="col-3">Product</div>
+        <div class="col-3">Price</div>
+        <div class="form-group col-3">
+            <label for="orderQuantity">Quantity</label>
+                <select class="form-control" name="quantity">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+        </div>
+    </div>
+    <br>
+    <div>
+        <button type="submit" class="btn btn-dark">Checkout</button>
+    </div>
+    
+</form>
