@@ -10,8 +10,8 @@ namespace MyStoreFront1.Controllers
 {
     public class ProductsController : Controller
     {
-        Models.ProductsViewModel productArray = new  
-        //ProductViewModel[] productArray = new ProductViewModel[2];
+        //Models.ProductsViewModel[] productArray = new Models.ProductsViewModel(); 
+
 
         //// GET: /<controller>/
         //public IActionResult Index(productArray)

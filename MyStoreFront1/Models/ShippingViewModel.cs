@@ -1,12 +1,24 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations; //used for [Required]
+
 namespace MyStoreFront1.Models
 {
     public class ShippingViewModel
     {
-        public string Address { get; set; }
+        [Required]
+        public string Street { get; set; }
+
+        [Required]
         public string City { get; set; }
+
+        [Required]
         public string State { get; set; }
+
+        [System.ComponentModel.DataAnnotations.RegularExpression(@"^\d{5}(?:[-\s]\d{4})?$")]
+        [Required]
         public int? ZipCode { get; set; }
+
+        [Required]
         public DateTime? Date { get; set; }
     }
 }
