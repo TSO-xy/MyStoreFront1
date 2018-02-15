@@ -27,7 +27,7 @@ namespace MyStoreFront1.Controllers
             }
             else 
             {
-                return View();
+                return View(model);
             }
         }
     }

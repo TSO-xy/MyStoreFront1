@@ -14,7 +14,7 @@ namespace MyStoreFront1.Models
         [Required]
         public string State { get; set; }
 
-        [System.ComponentModel.DataAnnotations.RegularExpression(@"^\d{5}(?:[-\s]\d{4})?$")]
+        [System.ComponentModel.DataAnnotations.RegularExpression(@"^\d{5}(?:[-\s]\d{4})?$", ErrorMessage = "Please use a 5 or 9 digit zip code")]
         [Required]
         public int? ZipCode { get; set; }
 
