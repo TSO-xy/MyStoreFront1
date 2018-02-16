@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace MyStoreFront1
 {
@@ -24,6 +28,13 @@ namespace MyStoreFront1
             services.AddMvc();
             services.AddAntiforgery();
 
+            services.AddDbContext<IdentityDbContext>(opt => opt.UseInMemoryDatabase("Identities"));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddDefaultTokenProviders();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -33,6 +44,9 @@ namespace MyStoreFront1
             {
                 app.UseBrowserLink(); //I added this manually
                 app.UseDeveloperExceptionPage();
+
+                app.UseAuthentication();
+                app.UseMvc();
             }
             else
             {

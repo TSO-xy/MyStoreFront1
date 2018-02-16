@@ -57,5 +57,6 @@
     <Folder Include="Views\Shipping\" />
     <Folder Include="Views\Billing\" />
     <Folder Include="Services\" />
+    <Folder Include="Views\Account\" />
   </ItemGroup>
 </Project>

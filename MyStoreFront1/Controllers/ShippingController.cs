@@ -12,8 +12,10 @@ namespace MyStoreFront1.Controllers
     public class ShippingController : Controller
     {
         // GET: /<controller>/
+        [HttpGet]
         public IActionResult Index()
         {
+            
             return View();
         }
 

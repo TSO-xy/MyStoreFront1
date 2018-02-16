@@ -16,7 +16,11 @@
             <dd>@Model.Description</dd>
             <dt>Price</dt>
             <dd>@Model.Price.ToString("c")</dd>
-            <button class="btn btn-dark">Add to cart</button>
+<!--            <button class="btn btn-dark">Add to cart</button>-->
         </dl>
+        <form asp-action="index" asp-controller="products" method="post">
+<!--            <input type="hidden" name="name" value="@Model.Name">  -->
+            <input type="submit" value="Add to cart" class="btn btn-dark" />
+        </form>
     </div>
 </div>

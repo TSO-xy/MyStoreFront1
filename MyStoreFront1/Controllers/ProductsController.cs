@@ -12,16 +12,18 @@ namespace MyStoreFront1.Controllers
     {
         //Models.ProductsViewModel[] productArray = new Models.ProductsViewModel(); 
 
-
         //// GET: /<controller>/
         //public IActionResult Index(productArray)
         //{
         //    return View();
         //}
-
-        public IActionResult Index(string id)
+        [HttpGet]
+        public IActionResult Index(int? id)
         {
-            if (id == "1")
+            Console.WriteLine("GOT info");
+            //move model instances here
+
+            if (id == 1)
             {
                 Models.ProductsViewModel model1 = new Models.ProductsViewModel();
                 model1.ID = 1;
@@ -34,7 +36,7 @@ namespace MyStoreFront1.Controllers
                 return View(model1);
             }
 
-            if (id == "2")
+            if (id == 2)
             {
                 Models.ProductsViewModel model2 = new Models.ProductsViewModel();
                 model2.ID = 2;
@@ -59,6 +61,33 @@ namespace MyStoreFront1.Controllers
                 return View(model1);
             }
 
+        }
+
+        [HttpPost]
+        public IActionResult Index(string name)
+        {
+            //Cookies: useful for saving small pieces of data
+            string cartId;
+            if(!Request.Cookies.ContainsKey("cartId"))
+            {
+                cartId = Guid.NewGuid().ToString();
+                Response.Cookies.Append("cartId", cartId, new Microsoft.AspNetCore.Http.CookieOptions
+                {
+                    Expires = DateTime.Now.AddYears(1)
+                });
+            }
+            else
+            {
+                Request.Cookies.TryGetValue("cartId", out cartId);
+            }
+            Console.WriteLine("cart");
+            //Console.WriteLine("Added {0} to cart {1}", cartId);
+            //TODO: Need to create a record in the database that
+            //corresponds to this cart ID, and add the product to that cart
+
+
+
+            return RedirectToAction("Index", "Shipping");
         }
     }
 }
