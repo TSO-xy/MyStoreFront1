@@ -39,6 +39,43 @@ namespace MyStoreFront1.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult Login() //GET
+        {
+            //_signInManager.SignInAsync().Wait();
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(string username, string password)
+        {
+            if (ModelState.IsValid)
+            {
+                IdentityUser existingUser = _signInManager.UserManager.FindByNameAsync(username).Result;
+                if (existingUser != null)
+                {
+                    //user found. try validating pw
+                    if(_signInManager.UserManager.CheckPasswordAsync(existingUser, password).Result)
+                    {
+                        _signInManager.SignInAsync(existingUser, false);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("username", "Username or password is incorrect");   
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("username", "Username or password is incorrect");
+                }
+            }
+            else
+            {
+                
+            }
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Register(string username, string password)
