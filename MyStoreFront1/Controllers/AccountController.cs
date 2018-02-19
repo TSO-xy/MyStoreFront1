@@ -56,7 +56,7 @@ namespace MyStoreFront1.Controllers
                     //user found. try validating pw
                     if(_signInManager.UserManager.CheckPasswordAsync(existingUser, password).Result)
                     {
-                        _signInManager.SignInAsync(existingUser, false);
+                        _signInManager.SignInAsync(existingUser, false).Wait();
                         return RedirectToAction("Index", "Home");
                     }
                     else

@@ -28,7 +28,11 @@ namespace MyStoreFront1
             services.AddMvc();
             services.AddAntiforgery();
 
-            services.AddDbContext<IdentityDbContext>(opt => opt.UseInMemoryDatabase("Identities"));
+            services.AddDbContext<IdentityDbContext>(opt =>
+                //opt.UseInMemoryDatabase("Identities"));   
+                opt.UseSqlServer("Data Source=localhost;Initial Catalog=JoshTest;Integrated Security=False;user=sa;password=P@ssw0rd!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+                                 ,sqlOptions => sqlOptions.MigrationsAssembly(this.GetType().Assembly.FullName)));
+                
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>()
