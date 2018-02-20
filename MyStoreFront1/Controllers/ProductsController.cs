@@ -20,46 +20,39 @@ namespace MyStoreFront1.Controllers
         [HttpGet]
         public IActionResult Index(int? id)
         {
-            Console.WriteLine("GOT info");
             //move model instances here
+            Models.ProductsViewModel model = new Models.ProductsViewModel();
 
-            if (id == 1)
+            string connectionString = "Data Source=localhost;Initial Catalog=JoshTest;Integrated Security=False;user=sa;password=P@ssw0rd!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            var connection = new System.Data.SqlClient.SqlConnection(connectionString);
+            connection.Open();
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT * FROM Products WHERE ID = " + id.Value;
+            var reader = command.ExecuteReader();
+            var nameColumn = reader.GetOrdinal("Name");
+            var priceColumn = reader.GetOrdinal("Price");
+            var genereColumn = reader.GetOrdinal("Genre");
+            var descriptionColumn = reader.GetOrdinal("Description");
+            var imageUrlColumn = reader.GetOrdinal("ImageUrl");
+            while (reader.Read())
             {
-                Models.ProductsViewModel model1 = new Models.ProductsViewModel();
-                model1.ID = 1;
-                model1.Name = "Jazz Pack";
-                model1.Price = 39.99m;
-                model1.Genre = "Jazz";
-                model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
-                model1.ImageUrl = "/images/jazz.jpg";
-
-                return View(model1);
+                model.Name = reader.GetString(nameColumn);
+                model.Price = reader.GetDecimal(priceColumn);
+                model.Genre = reader.GetString(genereColumn);
+                model.Description = reader.GetString(descriptionColumn);
+                model.ImageUrl = reader.GetString(imageUrlColumn);
             }
 
-            if (id == 2)
-            {
-                Models.ProductsViewModel model2 = new Models.ProductsViewModel();
-                model2.ID = 2;
-                model2.Name = "Rock Pack";
-                model2.Price = 29.99m;
-                model2.Genre = "Rock";
-                model2.Description = "Recreate the rugged sound of Rock music.";
-                model2.ImageUrl = "/images/Rock.jpg";
-
-                return View(model2);
-            }
-
-            else
-            {
-                Models.ProductsViewModel model1 = new Models.ProductsViewModel();
-                model1.ID = 1;
-                model1.Name = "Jazz Pack";
-                model1.Price = 39.99m;
-                model1.Genre = "Jazz";
-                model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
-                model1.ImageUrl = "/images/jazz.jpg";
-                return View(model1);
-            }
+                //Models.ProductsViewModel model1 = new Models.ProductsViewModel();
+                //model1.ID = 1;
+                //model1.Name = "Jazz Pack";
+                //model1.Price = 39.99m;
+                //model1.Genre = "Jazz";
+                //model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
+                //model1.ImageUrl = "/images/jazz.jpg";
+                
+            connection.Close();
+            return View(model);
 
         }
 
