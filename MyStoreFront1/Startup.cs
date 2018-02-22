@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using MyStoreFront1.Models;
 
 
 namespace MyStoreFront1
@@ -27,17 +28,17 @@ namespace MyStoreFront1
         {
             services.AddMvc();
             services.AddAntiforgery();
+            services.AddSession();
 
-            services.AddDbContext<IdentityDbContext>(opt =>
-                //opt.UseInMemoryDatabase("Identities"));   
-                opt.UseSqlServer("Data Source=localhost;Initial Catalog=JoshTest;Integrated Security=False;user=sa;password=P@ssw0rd!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-                                 ,sqlOptions => sqlOptions.MigrationsAssembly(this.GetType().Assembly.FullName)));
-                
+            services.Configure<Models.ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.AddOptions();
+
+            services.AddDbContext<IdentityDbContext>(
+                opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
-
 
         }
 

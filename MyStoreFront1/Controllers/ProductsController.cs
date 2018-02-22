@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.Extensions.Options;
+using MyStoreFront1.Models;
 
 namespace MyStoreFront1.Controllers
 {
     public class ProductsController : Controller
     {
-        //Models.ProductsViewModel[] productArray = new Models.ProductsViewModel(); 
+        private Models.ConnectionStrings _connectionStrings;
+
+        public ProductsController (Microsoft.Extensions.Options.IOptions<Models.ConnectionStrings> connectionStrings)
+        {
+            _connectionStrings = connectionStrings.Value;
+        }
 
         //// GET: /<controller>/
         //public IActionResult Index(productArray)
@@ -23,35 +28,39 @@ namespace MyStoreFront1.Controllers
             //move model instances here
             Models.ProductsViewModel model = new Models.ProductsViewModel();
 
-            string connectionString = "Data Source=localhost;Initial Catalog=JoshTest;Integrated Security=False;user=sa;password=P@ssw0rd!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            var connection = new System.Data.SqlClient.SqlConnection(connectionString);
-            connection.Open();
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT * FROM Products WHERE ID = " + id.Value;
-            var reader = command.ExecuteReader();
-            var nameColumn = reader.GetOrdinal("Name");
-            var priceColumn = reader.GetOrdinal("Price");
-            var genereColumn = reader.GetOrdinal("Genre");
-            var descriptionColumn = reader.GetOrdinal("Description");
-            var imageUrlColumn = reader.GetOrdinal("ImageUrl");
-            while (reader.Read())
+            //string connectionString = "Data Source=localhost;Initial Catalog=JoshTest;Integrated Security=False;user=sa;password=P@ssw0rd!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            using (var connection = new System.Data.SqlClient.SqlConnection(_connectionStrings.DefaultConnection))
             {
-                model.Name = reader.GetString(nameColumn);
-                model.Price = reader.GetDecimal(priceColumn);
-                model.Genre = reader.GetString(genereColumn);
-                model.Description = reader.GetString(descriptionColumn);
-                model.ImageUrl = reader.GetString(imageUrlColumn);
-            }
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT * FROM Products WHERE ID = " + id.Value;
+                using (var reader = command.ExecuteReader())
+                {
+                    var nameColumn = reader.GetOrdinal("Name");
+                    var priceColumn = reader.GetOrdinal("Price");
+                    //var genreColumn = reader.GetOrdinal("Genre");
+                    var descriptionColumn = reader.GetOrdinal("Description");
+                    var imageUrlColumn = reader.GetOrdinal("ImageUrl");
+                    while (reader.Read())
+                    {
+                        model.Name = reader.GetString(nameColumn);
+                        model.Price = reader.GetDecimal(priceColumn);
+                        //model.Genre = reader.GetString(genreColumn);
+                        model.Description = reader.GetString(descriptionColumn);
+                        model.ImageUrl = reader.GetString(imageUrlColumn);
+                    }
 
-                //Models.ProductsViewModel model1 = new Models.ProductsViewModel();
-                //model1.ID = 1;
-                //model1.Name = "Jazz Pack";
-                //model1.Price = 39.99m;
-                //model1.Genre = "Jazz";
-                //model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
-                //model1.ImageUrl = "/images/jazz.jpg";
+                    //Models.ProductsViewModel model1 = new Models.ProductsViewModel();
+                    //model1.ID = 1;
+                    //model1.Name = "Jazz Pack";
+                    //model1.Price = 39.99m;
+                    //model1.Genre = "Jazz";
+                    //model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
+                    //model1.ImageUrl = "/images/jazz.jpg";
+                }
+                    connection.Close();
                 
-            connection.Close();
+            }
             return View(model);
 
         }
