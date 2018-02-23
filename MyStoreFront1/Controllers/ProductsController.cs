@@ -33,7 +33,9 @@ namespace MyStoreFront1.Controllers
             {
                 connection.Open();
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM Products WHERE ID = " + id.Value;
+                command.CommandText = "sp_GetProduct";
+                command.Parameters.AddWithValue("@id", id);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
                 using (var reader = command.ExecuteReader())
                 {
                     var nameColumn = reader.GetOrdinal("Name");
