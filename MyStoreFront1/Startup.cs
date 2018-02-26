@@ -33,31 +33,30 @@ namespace MyStoreFront1
             services.Configure<Models.ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.AddOptions();
 
-            services.AddDbContext<IdentityDbContext>(
-                opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<JoshTestContext>(
+                opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+                                        sqlOptions => sqlOptions.MigrationsAssembly(this.GetType().Assembly.FullName)));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<IdentityDbContext>()
                 .AddDefaultTokenProviders();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, JoshTestContext context)
         {
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink(); //I added this manually
                 app.UseDeveloperExceptionPage();
-
-                app.UseAuthentication();
-                app.UseMvc();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UseAuthentication();
+            app.UseMvc();
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
@@ -66,6 +65,8 @@ namespace MyStoreFront1
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            DbInitializer.Initialize(context);
         }
     }
 }

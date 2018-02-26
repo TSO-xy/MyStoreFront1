@@ -1,4 +1,4 @@
-﻿@model MyStoreFront1.Models.ProductsViewModel;
+﻿@model MyStoreFront1.Models.Products;
 
 @{
     ViewData["Title"] = "Index";
@@ -15,7 +15,7 @@
             <dt>Description</dt>
             <dd>@Model.Description</dd>
             <dt>Price</dt>
-            <dd>@Model.Price.ToString("c")</dd>
+            <dd>@(Model.Price.HasValue ? Model.Price.Value.ToString("c") : "No Price")</dd>
 <!--            <button class="btn btn-dark">Add to cart</button>-->
         </dl>
         <form asp-action="index" asp-controller="products" method="post">

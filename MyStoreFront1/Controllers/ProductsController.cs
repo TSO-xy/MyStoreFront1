@@ -10,61 +10,28 @@ namespace MyStoreFront1.Controllers
 {
     public class ProductsController : Controller
     {
-        private Models.ConnectionStrings _connectionStrings;
+        private JoshTestContext _context;
 
-        public ProductsController (Microsoft.Extensions.Options.IOptions<Models.ConnectionStrings> connectionStrings)
+        public ProductsController(JoshTestContext context)
         {
-            _connectionStrings = connectionStrings.Value;
+            _context = context;
         }
 
-        //// GET: /<controller>/
-        //public IActionResult Index(productArray)
-        //{
-        //    return View();
-        //}
         [HttpGet]
         public IActionResult Index(int? id)
         {
-            //move model instances here
-            Models.ProductsViewModel model = new Models.ProductsViewModel();
+            var product = _context.Products.Find(id);
+            return View(product);
 
-            //string connectionString = "Data Source=localhost;Initial Catalog=JoshTest;Integrated Security=False;user=sa;password=P@ssw0rd!;Connect Timeout=30;Encrypt=False;TrustServerCertificate=True;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-            using (var connection = new System.Data.SqlClient.SqlConnection(_connectionStrings.DefaultConnection))
-            {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = "sp_GetProduct";
-                command.Parameters.AddWithValue("@id", id);
-                command.CommandType = System.Data.CommandType.StoredProcedure;
-                using (var reader = command.ExecuteReader())
-                {
-                    var nameColumn = reader.GetOrdinal("Name");
-                    var priceColumn = reader.GetOrdinal("Price");
-                    //var genreColumn = reader.GetOrdinal("Genre");
-                    var descriptionColumn = reader.GetOrdinal("Description");
-                    var imageUrlColumn = reader.GetOrdinal("ImageUrl");
-                    while (reader.Read())
-                    {
-                        model.Name = reader.GetString(nameColumn);
-                        model.Price = reader.GetDecimal(priceColumn);
-                        //model.Genre = reader.GetString(genreColumn);
-                        model.Description = reader.GetString(descriptionColumn);
-                        model.ImageUrl = reader.GetString(imageUrlColumn);
-                    }
-
-                    //Models.ProductsViewModel model1 = new Models.ProductsViewModel();
-                    //model1.ID = 1;
-                    //model1.Name = "Jazz Pack";
-                    //model1.Price = 39.99m;
-                    //model1.Genre = "Jazz";
-                    //model1.Description = "Use this to recreate the sharp, tangy sounds of Jazz music.";
-                    //model1.ImageUrl = "/images/jazz.jpg";
-                }
-                    connection.Close();
-                
-            }
-            return View(model);
-
+            //If View expects IEnumerable (Array of products)
+            //if (id.HasValue)
+            //{
+            //    return View(_context.Products.Where(id == id.Value));
+            //}
+            //else
+            //{
+            //    return View(_context.Products);
+            //}
         }
 
         [HttpPost]

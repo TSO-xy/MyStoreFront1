@@ -64,4 +64,10 @@
     <Folder Include="Services\" />
     <Folder Include="Views\Account\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Models\ProductsViewModel.cs" />
+    <Compile Remove="Migrations\20180219182804_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20180219182804_InitialCreate.cs" />
+    <Compile Remove="Migrations\IdentityDbContextModelSnapshot.cs" />
+  </ItemGroup>
 </Project>
