@@ -1,0 +1,19 @@
+﻿@model IEnumerable<MyStoreFront1.Models.Products>
+@{
+
+}
+<h1>Products</h1>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+     <div class="col-3">
+        <h3>@product.Name</h3>
+            <img src="@product.ImageUrl" class="img-fluid" />
+            <form asp-action="index" asp-controller="products" method="post">
+               <input type="submit" value="Add to cart" class="btn btn-dark" />
+            </form>  
+     </div>
+
+     }
+</div>

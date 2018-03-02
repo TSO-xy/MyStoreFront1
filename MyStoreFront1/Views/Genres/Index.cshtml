@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<MyStoreFront1.Models.Genres>
 
+
 @{
     ViewData["Title"] = "Genres";
 }
@@ -10,8 +11,9 @@
             {
             <div class="col-3">
                 <h3>@genre.Name</h3>
-                <img src="@genre.ImageUrl" class="img-fluid" />
-
+                <a asp-controller="Genres" asp-action="Details" asp-route-id="@genre.Name">
+                    <img src="@genre.ImageUrl" class="img-fluid" />
+                </a>
             </div>
 
             }

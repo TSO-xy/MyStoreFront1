@@ -1,0 +1,5 @@
+﻿@inject JoshTestContext context
+@foreach (var genre in context.Genres)
+{
+    <li class="nav-item"><a asp-area="" asp-controller="Genres" asp-action="Index" asp-route-id="@genre.Id" class="nav-link">@genre.Name</a></li>
+}

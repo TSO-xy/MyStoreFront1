@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove=".bowerrc" />
+    <None Remove="Views\Details\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Products\" />
