@@ -18,30 +18,35 @@ namespace MyStoreFront1
                 context.Genres.Add(new Genres
                 {
                     Name = "Jazz",
+                    ImageUrl = "/images/jazzgenre.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now
                 });
                 context.Genres.Add(new Genres
                 {
                     Name = "Rock",
+                    ImageUrl = "/images/rockgenre.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now
                 });
                 context.Genres.Add(new Genres
                 {
                     Name = "Hip Hop",
+                    ImageUrl = "/images/hiphopgenre.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now
                 });
                 context.Genres.Add(new Genres
                 {
                     Name = "Electronic",
+                    ImageUrl = "/images/electronicgenre.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now
                 });
                 context.Genres.Add(new Genres
                 {
                     Name = "FX",
+                    ImageUrl = "/images/FXgenre.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now
                 });

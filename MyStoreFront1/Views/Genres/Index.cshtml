@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MyStoreFront1.Models.Products>
+﻿@model IEnumerable<MyStoreFront1.Models.Genres>
 
 @{
     ViewData["Title"] = "Genres";
@@ -6,11 +6,11 @@
 <h1>Genres</h1>
 
         <div class="row">
-            @foreach (var product in Model)
+            @foreach (var genre in Model)
             {
             <div class="col-3">
-                <h3>@product.Name</h3>
-                <img src="@product.ImageUrl" class="img-fluid" />
+                <h3>@genre.Name</h3>
+                <img src="@genre.ImageUrl" class="img-fluid" />
 
             </div>
 

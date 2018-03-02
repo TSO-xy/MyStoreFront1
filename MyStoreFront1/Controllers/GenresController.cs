@@ -18,8 +18,8 @@ namespace MyStoreFront1.Controllers
 
         public IActionResult Index()
         {
-            var products = _context.Products;
-            return View(products);
+            var genres = _context.Genres;
+            return View(genres);
         }
     }
 }

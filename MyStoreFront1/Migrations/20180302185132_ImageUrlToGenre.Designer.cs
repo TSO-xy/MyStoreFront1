@@ -11,9 +11,10 @@ using System;
 namespace MyStoreFront1.Migrations
 {
     [DbContext(typeof(JoshTestContext))]
-    partial class JoshTestContextModelSnapshot : ModelSnapshot
+    [Migration("20180302185132_ImageUrlToGenre")]
+    partial class ImageUrlToGenre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
