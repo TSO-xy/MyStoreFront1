@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore;
+using MyStoreFront1.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,9 +14,9 @@ namespace MyStoreFront1.Controllers
 {
     public class AccountController : Controller
     {
-        private SignInManager<IdentityUser> _signInManager;
+        private SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(SignInManager<IdentityUser> signInManager)
+        public AccountController(SignInManager<ApplicationUser> signInManager)
         {
             this._signInManager = signInManager;
         }
@@ -50,7 +51,7 @@ namespace MyStoreFront1.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser existingUser = _signInManager.UserManager.FindByNameAsync(username).Result;
+                ApplicationUser existingUser = _signInManager.UserManager.FindByNameAsync(username).Result;
                 if (existingUser != null)
                 {
                     //user found. try validating pw
@@ -82,7 +83,7 @@ namespace MyStoreFront1.Controllers
         {
             if (ModelState.IsValid)
             {
-                IdentityUser newUser = new IdentityUser(username);
+                ApplicationUser newUser = new ApplicationUser(username);
                 var userResult = _signInManager.UserManager.CreateAsync(newUser).Result;
                 if (userResult.Succeeded)
                 {

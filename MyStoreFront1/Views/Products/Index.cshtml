@@ -18,6 +18,15 @@
             <dd>@(Model.Price.HasValue ? Model.Price.Value.ToString("c") : "No Price")</dd>
 <!--            <button class="btn btn-dark">Add to cart</button>-->
         </dl>
+        @if(Model.Reviews != null && Model.Reviews.Any())
+        {
+            foreach(var review in Model.Reviews)
+            {
+                <blockquote>
+                    @review.Body - @review.Rating
+                </blockquote>
+            }
+        }
         <form asp-action="index" asp-controller="products" method="post">
 <!--            <input type="hidden" name="name" value="@Model.Name">  -->
             <input type="submit" value="Add to cart" class="btn btn-dark" />

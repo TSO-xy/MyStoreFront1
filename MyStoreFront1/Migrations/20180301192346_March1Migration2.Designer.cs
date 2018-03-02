@@ -11,8 +11,8 @@ using System;
 namespace MyStoreFront1.Migrations
 {
     [DbContext(typeof(JoshTestContext))]
-    [Migration("20180226182145_ProductsAndGenres")]
-    partial class ProductsAndGenres
+    [Migration("20180301192346_March1Migration2")]
+    partial class March1Migration2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -257,9 +257,29 @@ namespace MyStoreFront1.Migrations
                     b.ToTable("Genres");
                 });
 
+            modelBuilder.Entity("MyStoreFront1.Models.LineItem", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("OrderID");
+
+                    b.Property<int?>("ProductId");
+
+                    b.Property<int>("Quantity");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("OrderID");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("LineItems");
+                });
+
             modelBuilder.Entity("MyStoreFront1.Models.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("ID");
 
@@ -273,27 +293,8 @@ namespace MyStoreFront1.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(100);
-
-                    b.Property<decimal>("Shipping")
+                    b.Property<decimal>("ShippingTotal")
                         .HasColumnType("money");
-
-                    b.Property<string>("ShippingCity")
-                        .IsRequired()
-                        .HasMaxLength(500);
-
-                    b.Property<string>("ShippingState")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<string>("ShippingStreet")
-                        .IsRequired()
-                        .HasMaxLength(1000);
-
-                    b.Property<string>("ShippingZip")
-                        .IsRequired()
-                        .HasMaxLength(50);
 
                     b.Property<decimal>("Subtotal")
                         .HasColumnType("money");
@@ -301,7 +302,14 @@ namespace MyStoreFront1.Migrations
                     b.Property<decimal>("Tax")
                         .HasColumnType("money");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("TrackingNumber")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Order");
                 });
@@ -352,6 +360,8 @@ namespace MyStoreFront1.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(500);
 
+                    b.Property<int?>("GenreId");
+
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(1000);
 
@@ -363,22 +373,33 @@ namespace MyStoreFront1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GenreId");
+
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("MyStoreFront1.Models.ProductsGenres", b =>
+            modelBuilder.Entity("MyStoreFront1.Models.Review", b =>
                 {
-                    b.Property<int>("ProductId")
-                        .HasColumnName("ProductID");
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<int>("GenreId")
-                        .HasColumnName("GenreID");
+                    b.Property<string>("Body");
 
-                    b.HasKey("ProductId", "GenreId");
+                    b.Property<bool>("IsApproved");
 
-                    b.HasIndex("GenreId");
+                    b.Property<int?>("ProductId");
 
-                    b.ToTable("ProductsGenres");
+                    b.Property<int>("Rating");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -439,6 +460,24 @@ namespace MyStoreFront1.Migrations
                         .HasConstraintName("FK_CartProducts_Product");
                 });
 
+            modelBuilder.Entity("MyStoreFront1.Models.LineItem", b =>
+                {
+                    b.HasOne("MyStoreFront1.Models.Order", "Order")
+                        .WithMany("LineItems")
+                        .HasForeignKey("OrderID");
+
+                    b.HasOne("MyStoreFront1.Models.Products", "Product")
+                        .WithMany("LineItems")
+                        .HasForeignKey("ProductId");
+                });
+
+            modelBuilder.Entity("MyStoreFront1.Models.Order", b =>
+                {
+                    b.HasOne("MyStoreFront1.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("MyStoreFront1.Models.OrderProducts", b =>
                 {
                     b.HasOne("MyStoreFront1.Models.Order", "Order")
@@ -452,17 +491,22 @@ namespace MyStoreFront1.Migrations
                         .HasConstraintName("FK_OrderProducts_Product");
                 });
 
-            modelBuilder.Entity("MyStoreFront1.Models.ProductsGenres", b =>
+            modelBuilder.Entity("MyStoreFront1.Models.Products", b =>
                 {
                     b.HasOne("MyStoreFront1.Models.Genres", "Genre")
-                        .WithMany("ProductsGenres")
-                        .HasForeignKey("GenreId")
-                        .HasConstraintName("FK_ProductsGenres_Genres");
+                        .WithMany("Products")
+                        .HasForeignKey("GenreId");
+                });
 
+            modelBuilder.Entity("MyStoreFront1.Models.Review", b =>
+                {
                     b.HasOne("MyStoreFront1.Models.Products", "Product")
-                        .WithMany("ProductsGenres")
-                        .HasForeignKey("ProductId")
-                        .HasConstraintName("FK_ProductsGenres_Products");
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("MyStoreFront1.Models.ApplicationUser", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MyStoreFront1.Models;
+using Microsoft.EntityFrameworkCore; //used for .Include
 
 namespace MyStoreFront1.Controllers
 {
@@ -17,16 +18,29 @@ namespace MyStoreFront1.Controllers
             _context = context;
         }
 
+        public IActionResult Index()
+        {
+            string cartId;
+            if (Request.Cookies.TryGetValue("cartId", out cartId))
+            {
+
+                var trackingGuid = Guid.Parse(cartId);
+                var order = _context.Orders.Include(x => x.LineItems).ThenInclude(y => y.Product).Single(x => x.TrackingNumber == trackingGuid);
+                ViewData["productName"] = order.LineItems.First().Product.Name;
+            }
+            return View();
+        }
+
         [HttpGet]
         public IActionResult Index(int? id)
         {
-            var product = _context.Products.Find(id);
+            var product = _context.Products.Include(x => x.Reviews).Single(x => x.Id == id);
             return View(product);
 
             //If View expects IEnumerable (Array of products)
             //if (id.HasValue)
             //{
-            //    return View(_context.Products.Where(id == id.Value));
+            //    return View(_context.Products.Where(id == Id.Value));
             //}
             //else
             //{
@@ -35,12 +49,28 @@ namespace MyStoreFront1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(string name)
+        public IActionResult Index(string id)
         {
             //Cookies: useful for saving small pieces of data
             string cartId;
             if(!Request.Cookies.ContainsKey("cartId"))
             {
+                var product = _context.Products.Find(id);
+                Order o = new Order();
+                LineItem l = new LineItem();
+                l.Quantity = 1;
+                l.Product = product;
+                o.LineItems.Add(l);
+                o.DateCreated = DateTime.UtcNow;
+                o.Subtotal = product.Price ?? 0m;
+                o.Tax = o.Subtotal * 0.1m;
+                o.ShippingTotal = 7m;
+                o.TrackingNumber = new Guid();
+
+                _context.Orders.Add(o);
+                _context.SaveChanges();
+                cartId = o.TrackingNumber.ToString();
+
                 cartId = Guid.NewGuid().ToString();
                 Response.Cookies.Append("cartId", cartId, new Microsoft.AspNetCore.Http.CookieOptions
                 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MyStoreFront1.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MyStoreFront1
 {
@@ -9,7 +10,8 @@ namespace MyStoreFront1
         internal static void Initialize(JoshTestContext context)
         {
             //Making sure database exists
-            context.Database.EnsureCreated();
+            //context.Database.EnsureCreated();
+            context.Database.Migrate();
 
             if (!context.Genres.Any())
             {
@@ -44,6 +46,7 @@ namespace MyStoreFront1
                     DateLastModified = DateTime.Now
                 });
             }
+            context.SaveChanges();
 
             if (!context.Products.Any())
             {
@@ -55,6 +58,9 @@ namespace MyStoreFront1
                     ImageUrl = "/images/jazz.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now,
+                    //TODO: Add to a Genre category
+                    Genre = context.Genres.First(x => x.Name == "Jazz")
+
                 });
                 context.Products.Add(new Products
                 {
@@ -64,6 +70,7 @@ namespace MyStoreFront1
                     ImageUrl = "/images/jazzdrums.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now,
+                    Genre = context.Genres.First(x => x.Name =="Jazz")
                 });
                 context.Products.Add(new Products
                 {
@@ -73,6 +80,7 @@ namespace MyStoreFront1
                     ImageUrl = "/images/rock.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now,
+                    Genre = context.Genres.First(x => x.Name == "Rock")
                 });
                 context.Products.Add(new Products
                 {
@@ -82,6 +90,7 @@ namespace MyStoreFront1
                     ImageUrl = "/images/hiphop.jpg",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now,
+                    Genre = context.Genres.First(x => x.Name == "Hip Hop")
                 });
                 context.Products.Add(new Products
                 {
@@ -91,9 +100,21 @@ namespace MyStoreFront1
                     ImageUrl = "/images/808.png",
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now,
+                    Genre = context.Genres.First(x => x.Name == "Hip Hop")
                 });
             }
+            context.SaveChanges();
+            if (!context.Reviews.Any())
+            {
+                context.Reviews.Add(new Review
+                {
+                    Rating = 5,
+                    Body = "Totally worth the money!",
+                    IsApproved = true,
+                    Product = context.Products.First(), //adds review to 1st product in database
 
+                });
+            }
             context.SaveChanges();
         }
     }

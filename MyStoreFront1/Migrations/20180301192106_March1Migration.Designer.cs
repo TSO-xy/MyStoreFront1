@@ -11,9 +11,10 @@ using System;
 namespace MyStoreFront1.Migrations
 {
     [DbContext(typeof(JoshTestContext))]
-    partial class JoshTestContextModelSnapshot : ModelSnapshot
+    [Migration("20180301192106_March1Migration")]
+    partial class March1Migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,7 +360,9 @@ namespace MyStoreFront1.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("GenreId");
+                    b.Property<string>("Genre");
+
+                    b.Property<int?>("GenresId");
 
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(1000);
@@ -372,7 +375,7 @@ namespace MyStoreFront1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("GenresId");
 
                     b.ToTable("Products");
                 });
@@ -492,9 +495,9 @@ namespace MyStoreFront1.Migrations
 
             modelBuilder.Entity("MyStoreFront1.Models.Products", b =>
                 {
-                    b.HasOne("MyStoreFront1.Models.Genres", "Genre")
+                    b.HasOne("MyStoreFront1.Models.Genres")
                         .WithMany("Products")
-                        .HasForeignKey("GenreId");
+                        .HasForeignKey("GenresId");
                 });
 
             modelBuilder.Entity("MyStoreFront1.Models.Review", b =>

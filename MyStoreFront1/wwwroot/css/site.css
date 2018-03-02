@@ -11,6 +11,11 @@
     line-height: 1.4
 }
 
+/*.carousel-inner {
+    max-height: 500px;
+    width: 100%;
+}*/
+
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"] {
     width: 100%

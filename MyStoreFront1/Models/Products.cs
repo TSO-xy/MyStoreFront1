@@ -9,7 +9,9 @@ namespace MyStoreFront1.Models
         {
             CartProducts = new HashSet<CartProducts>();
             OrderProducts = new HashSet<OrderProducts>();
-            ProductsGenres = new HashSet<ProductsGenres>();
+            //ProductsGenres = new HashSet<ProductsGenres>();
+            Reviews = new HashSet<Review>();
+            LineItems = new HashSet<LineItem>();
         }
 
         public int Id { get; set; }
@@ -19,9 +21,12 @@ namespace MyStoreFront1.Models
         public string ImageUrl { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateLastModified { get; set; }
+        public Genres Genre { get; set; }
 
         public ICollection<CartProducts> CartProducts { get; set; }
         public ICollection<OrderProducts> OrderProducts { get; set; }
-        public ICollection<ProductsGenres> ProductsGenres { get; set; }
+        //public ICollection<ProductsGenres> ProductsGenres { get; set; }
+        public ICollection<Review> Reviews { get; set; }
+        public ICollection<LineItem> LineItems { get; set; }
     }
 }

@@ -11,9 +11,10 @@ using System;
 namespace MyStoreFront1.Migrations
 {
     [DbContext(typeof(JoshTestContext))]
-    partial class JoshTestContextModelSnapshot : ModelSnapshot
+    [Migration("20180228025200_OrderLineItems")]
+    partial class OrderLineItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -359,8 +360,6 @@ namespace MyStoreFront1.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(500);
 
-                    b.Property<int?>("GenreId");
-
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(1000);
 
@@ -372,9 +371,22 @@ namespace MyStoreFront1.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("MyStoreFront1.Models.ProductsGenres", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnName("ProductID");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnName("GenreID");
+
+                    b.HasKey("ProductId", "GenreId");
+
                     b.HasIndex("GenreId");
 
-                    b.ToTable("Products");
+                    b.ToTable("ProductsGenres");
                 });
 
             modelBuilder.Entity("MyStoreFront1.Models.Review", b =>
@@ -490,11 +502,17 @@ namespace MyStoreFront1.Migrations
                         .HasConstraintName("FK_OrderProducts_Product");
                 });
 
-            modelBuilder.Entity("MyStoreFront1.Models.Products", b =>
+            modelBuilder.Entity("MyStoreFront1.Models.ProductsGenres", b =>
                 {
                     b.HasOne("MyStoreFront1.Models.Genres", "Genre")
-                        .WithMany("Products")
-                        .HasForeignKey("GenreId");
+                        .WithMany("ProductsGenres")
+                        .HasForeignKey("GenreId")
+                        .HasConstraintName("FK_ProductsGenres_Genres");
+
+                    b.HasOne("MyStoreFront1.Models.Products", "Product")
+                        .WithMany("ProductsGenres")
+                        .HasForeignKey("ProductId")
+                        .HasConstraintName("FK_ProductsGenres_Products");
                 });
 
             modelBuilder.Entity("MyStoreFront1.Models.Review", b =>

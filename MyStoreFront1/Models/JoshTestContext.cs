@@ -16,13 +16,18 @@ namespace MyStoreFront1.Models
             
         }
 
+        public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<LineItem> LineItems { get; set; }
+
         public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<CartProducts> CartProducts { get; set; }
         public virtual DbSet<Genres> Genres { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderProducts> OrderProducts { get; set; }
         public virtual DbSet<Products> Products { get; set; }
-        public virtual DbSet<ProductsGenres> ProductsGenres { get; set; }
+        //public virtual DbSet<ProductsGenres> ProductsGenres { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -90,7 +95,14 @@ namespace MyStoreFront1.Models
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("ID");
+                entity.HasKey(e => e.ID); //fluent syntax
+
+                entity.Property(prop => prop.TrackingNumber).ValueGeneratedOnAdd();
+
+                entity.HasMany(e => e.LineItems);
+                //entity.HasOne();
+
+                entity.Property(e => e.ID).HasColumnName("ID");
 
                 entity.Property(e => e.DateCreated)
                     .HasColumnType("datetime")
@@ -100,29 +112,34 @@ namespace MyStoreFront1.Models
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Email).HasMaxLength(100);
+                //entity.Property(e => e.Email).HasMaxLength(100);
 
-                entity.Property(e => e.Shipping).HasColumnType("money");
+                entity.Property(e => e.ShippingTotal).HasColumnType("money");
 
-                entity.Property(e => e.ShippingCity)
-                    .IsRequired()
-                    .HasMaxLength(500);
+                //entity.Property(e => e.ShippingCity)
+                //    .IsRequired()
+                //    .HasMaxLength(500);
 
-                entity.Property(e => e.ShippingState)
-                    .IsRequired()
-                    .HasMaxLength(100);
+                //entity.Property(e => e.ShippingState)
+                //    .IsRequired()
+                //    .HasMaxLength(100);
 
-                entity.Property(e => e.ShippingStreet)
-                    .IsRequired()
-                    .HasMaxLength(1000);
+                //entity.Property(e => e.ShippingStreet)
+                //    .IsRequired()
+                //    .HasMaxLength(1000);
 
-                entity.Property(e => e.ShippingZip)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                //entity.Property(e => e.ShippingZip)
+                    //.IsRequired()
+                    //.HasMaxLength(50);
 
                 entity.Property(e => e.Subtotal).HasColumnType("money");
 
                 entity.Property(e => e.Tax).HasColumnType("money");
+            });
+
+            modelBuilder.Entity<LineItem>(entity => 
+            {
+                entity.HasOne(l => l.Order).WithMany(o => o.LineItems);
             });
 
             modelBuilder.Entity<OrderProducts>(entity =>
@@ -175,26 +192,26 @@ namespace MyStoreFront1.Models
                 entity.Property(e => e.Price).HasColumnType("money");
             });
 
-            modelBuilder.Entity<ProductsGenres>(entity =>
-            {
-                entity.HasKey(e => new { e.ProductId, e.GenreId });
+            //modelBuilder.Entity<ProductsGenres>(entity =>
+            //{
+            //    entity.HasKey(e => new { e.ProductId, e.GenreId });
 
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            //    entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.GenreId).HasColumnName("GenreID");
+            //    entity.Property(e => e.GenreId).HasColumnName("GenreID");
 
-                entity.HasOne(d => d.Genre)
-                    .WithMany(p => p.ProductsGenres)
-                    .HasForeignKey(d => d.GenreId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductsGenres_Genres");
+            //    entity.HasOne(d => d.Genre)
+            //        .WithMany(p => p.ProductsGenres)
+            //        .HasForeignKey(d => d.GenreId)
+            //        .OnDelete(DeleteBehavior.ClientSetNull)
+            //        .HasConstraintName("FK_ProductsGenres_Genres");
 
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.ProductsGenres)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ProductsGenres_Products");
-            });
+            //    entity.HasOne(d => d.Product)
+            //        .WithMany(p => p.ProductsGenres)
+            //        .HasForeignKey(d => d.ProductId)
+            //        .OnDelete(DeleteBehavior.ClientSetNull)
+            //        .HasConstraintName("FK_ProductsGenres_Products");
+            //});
         }
     }
 }

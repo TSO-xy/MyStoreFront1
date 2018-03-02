@@ -7,7 +7,7 @@ namespace MyStoreFront1.Models
     {
         public Genres()
         {
-            ProductsGenres = new HashSet<ProductsGenres>();
+            Products = new HashSet<Products>();
         }
 
         public int Id { get; set; }
@@ -15,6 +15,6 @@ namespace MyStoreFront1.Models
         public DateTime? DateCreated { get; set; }
         public DateTime? DateLastModified { get; set; }
 
-        public ICollection<ProductsGenres> ProductsGenres { get; set; }
+        public ICollection<Products> Products { get; set; }
     }
 }
