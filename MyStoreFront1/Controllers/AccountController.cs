@@ -14,9 +14,12 @@ namespace MyStoreFront1.Controllers
     {
         private SignInManager<ApplicationUser> _signInManager;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager)
+        private SendGrid.SendGridClient _sendGridClient;
+
+        public AccountController(SignInManager<ApplicationUser> signInManager, SendGrid.SendGridClient sendGridClient)
         {
             this._signInManager = signInManager;
+            this._sendGridClient = sendGridClient;
         }
 
 
@@ -77,18 +80,28 @@ namespace MyStoreFront1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(string email, string username, string password)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser newUser = new ApplicationUser(username);
+                ApplicationUser newUser = new ApplicationUser();
+                newUser.Email = email;
+                newUser.UserName = email;
                 var userResult = await _signInManager.UserManager.CreateAsync(newUser);
                 if (userResult.Succeeded)
                 {
                     var passwordResult = await _signInManager.UserManager.AddPasswordAsync(newUser, password);
                     if (passwordResult.Succeeded)
                     {
-                        _signInManager.SignInAsync(newUser, false).Wait();
+                        //SendGrid.SendGridClient sendGridClient = new SendGrid.SendGridClient("api_key");
+                        SendGrid.Helpers.Mail.SendGridMessage message = new SendGrid.Helpers.Mail.SendGridMessage();
+                        message.AddTo(email);
+                        message.Subject = "Welcome to the Sound Store!";
+                        message.SetFrom("admin@soundstore.com");
+                        message.AddContent("text/plain", "Thanks for registering " + username + " on Sound Store!");
+                        await _sendGridClient.SendEmailAsync(message);
+
+                        await _signInManager.SignInAsync(newUser, false);
                         return RedirectToAction("Index", "Home");
                     }
                     else
@@ -97,7 +110,7 @@ namespace MyStoreFront1.Controllers
                         {
                             ModelState.AddModelError(error.Code, error.Description);
                         }
-                        _signInManager.UserManager.DeleteAsync(newUser).Wait();
+                        await _signInManager.UserManager.DeleteAsync(newUser);
                     }
                 }
                 else

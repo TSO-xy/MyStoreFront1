@@ -41,6 +41,12 @@ namespace MyStoreFront1
                 .AddEntityFrameworkStores<JoshTestContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddTransient<SendGrid.SendGridClient>((x) =>
+            {
+                return new SendGrid.SendGridClient(Configuration["sendgridkey"]);
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
