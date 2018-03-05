@@ -38,7 +38,7 @@ namespace MyStoreFront1
                                         sqlOptions => sqlOptions.MigrationsAssembly(this.GetType().Assembly.FullName)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
+                .AddEntityFrameworkStores<JoshTestContext>()
                 .AddDefaultTokenProviders();
 
         }

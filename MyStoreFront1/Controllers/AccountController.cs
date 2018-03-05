@@ -44,16 +44,16 @@ namespace MyStoreFront1.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Login(string username, string password)
+        [HttpPost] //optimal threading (asynchronous)
+        public async Task<IActionResult> Login(string username, string password)
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser existingUser = _signInManager.UserManager.FindByNameAsync(username).Result;
+                ApplicationUser existingUser = await _signInManager.UserManager.FindByNameAsync(username);
                 if (existingUser != null)
                 {
                     //user found. try validating pw
-                    if(_signInManager.UserManager.CheckPasswordAsync(existingUser, password).Result)
+                    if(await _signInManager.UserManager.CheckPasswordAsync(existingUser, password))
                     {
                         _signInManager.SignInAsync(existingUser, false).Wait();
                         return RedirectToAction("Index", "Home");
@@ -77,15 +77,15 @@ namespace MyStoreFront1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Register(string username, string password)
+        public async Task<IActionResult> Register(string username, string password)
         {
             if (ModelState.IsValid)
             {
                 ApplicationUser newUser = new ApplicationUser(username);
-                var userResult = _signInManager.UserManager.CreateAsync(newUser).Result;
+                var userResult = await _signInManager.UserManager.CreateAsync(newUser);
                 if (userResult.Succeeded)
                 {
-                    var passwordResult = _signInManager.UserManager.AddPasswordAsync(newUser, password).Result;
+                    var passwordResult = await _signInManager.UserManager.AddPasswordAsync(newUser, password);
                     if (passwordResult.Succeeded)
                     {
                         _signInManager.SignInAsync(newUser, false).Wait();
