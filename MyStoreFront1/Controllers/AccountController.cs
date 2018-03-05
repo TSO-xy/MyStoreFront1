@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore;
+//using Microsoft.AspNetCore;
 using MyStoreFront1.Models;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MyStoreFront1.Controllers
 {
@@ -21,12 +19,12 @@ namespace MyStoreFront1.Controllers
             this._signInManager = signInManager;
         }
 
-        // GET: /<controller>/
+
         [Microsoft.AspNetCore.Authorization.Authorize]
         public IActionResult Index()
         {
 
-            return Content("You can only see this if you're signed in!");
+            return Content("Sign in to view content.");
         }
 
         public IActionResult Register()

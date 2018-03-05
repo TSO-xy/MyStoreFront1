@@ -50,6 +50,27 @@ namespace MyStoreFront1
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now
                 });
+                context.Genres.Add(new Genres
+                {
+                    Name = "Vocal Samples",
+                    ImageUrl = "/images/vocalgenre.jpg",
+                    DateCreated = DateTime.Now,
+                    DateLastModified = DateTime.Now
+                });
+                context.Genres.Add(new Genres
+                {
+                    Name = "Classical",
+                    ImageUrl = "/images/classicalgenre.jpg",
+                    DateCreated = DateTime.Now,
+                    DateLastModified = DateTime.Now
+                });
+                context.Genres.Add(new Genres
+                {
+                    Name = "Pop",
+                    ImageUrl = "/images/funkdiscogenre.jpg",
+                    DateCreated = DateTime.Now,
+                    DateLastModified = DateTime.Now
+                });
             }
             context.SaveChanges();
 
@@ -76,6 +97,16 @@ namespace MyStoreFront1
                     DateCreated = DateTime.Now,
                     DateLastModified = DateTime.Now,
                     Genre = context.Genres.First(x => x.Name =="Jazz")
+                });
+                context.Products.Add(new Products
+                {
+                    Name = "Jazz Horns",
+                    Price = 24.99m,
+                    Description = "Everything from smooth sax to lively trumpet.",
+                    ImageUrl = "/images/jazzgenre.jpg",
+                    DateCreated = DateTime.Now,
+                    DateLastModified = DateTime.Now,
+                    Genre = context.Genres.First(x => x.Name == "Jazz")
                 });
                 context.Products.Add(new Products
                 {

@@ -1,19 +1,38 @@
 ﻿@model IEnumerable<MyStoreFront1.Models.Products>
-@{
-
+@{ 
+    //Layout = null;
 }
+<head>
+    <style>
+       h1 { text-align: center; }
+       img {
+           margin-right: 20px;
+       }
+    </style>
+</head>
 <h1>Products</h1>
 
 <div class="row">
+<div class="col-12">
     @foreach (var product in Model)
     {
-     <div class="col-3">
-        <h3>@product.Name</h3>
-            <img src="@product.ImageUrl" class="img-fluid" />
+     <div class="row">
+         <div class="col-5"> 
+            <img src="@product.ImageUrl" style="max-height: 200px"/>
+        </div>
+     <div class="col-7"> 
+            <h4>@product.Name</h4>
+            <br>
+            <p>@product.Description</p>
+            <br>
+            <p>@product.Price</p>
+            <div class="form-group">
             <form asp-action="index" asp-controller="products" method="post">
                <input type="submit" value="Add to cart" class="btn btn-dark" />
             </form>  
+            </div>
+     </div>   
      </div>
-
+     <br />
      }
 </div>
