@@ -10,7 +10,6 @@ namespace MyStoreFront1
         internal static void Initialize(JoshTestContext context)
         {
             //Making sure database exists
-            //context.Database.EnsureCreated();
             context.Database.Migrate();
 
             if (!context.Genres.Any())

@@ -86,7 +86,7 @@ namespace MyStoreFront1.Controllers
             {
                 ApplicationUser newUser = new ApplicationUser();
                 newUser.Email = email;
-                newUser.UserName = email;
+                newUser.UserName = username;
                 var userResult = await _signInManager.UserManager.CreateAsync(newUser);
                 if (userResult.Succeeded)
                 {
