@@ -51,7 +51,6 @@ namespace MyStoreFront1.Controllers
         [HttpPost]
         public IActionResult Index(string id)
         {
-            //Cookies: useful for saving small pieces of data
             string cartId;
             if(!Request.Cookies.ContainsKey("cartId"))
             {

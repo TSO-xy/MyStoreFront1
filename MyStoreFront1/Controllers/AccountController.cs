@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-//using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Http.Extensions;
+
 using MyStoreFront1.Models;
 
 namespace MyStoreFront1.Controllers
@@ -56,14 +57,14 @@ namespace MyStoreFront1.Controllers
                 if (existingUser != null)
                 {
                     //user found. try validating pw
-                    if(await _signInManager.UserManager.CheckPasswordAsync(existingUser, password))
+                    if (await _signInManager.UserManager.CheckPasswordAsync(existingUser, password))
                     {
                         _signInManager.SignInAsync(existingUser, false).Wait();
                         return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        ModelState.AddModelError("username", "Username or password is incorrect");   
+                        ModelState.AddModelError("username", "Username or password is incorrect");
                     }
                 }
                 else
@@ -73,7 +74,7 @@ namespace MyStoreFront1.Controllers
             }
             else
             {
-                
+
             }
             return View();
         }
@@ -99,6 +100,8 @@ namespace MyStoreFront1.Controllers
                         message.Subject = "Welcome to the Sound Store!";
                         message.SetFrom("admin@soundstore.com");
                         message.AddContent("text/plain", "Thanks for registering " + username + " on Sound Store!");
+                        message.AddContent("text/html", "Thanks for registering " + username + " on Sound Store!");
+                        message.SetTemplateId("7610f02c-135a-4a53-844f-ccc2003ee5a8");
                         await _sendGridClient.SendEmailAsync(message);
 
                         await _signInManager.SignInAsync(newUser, false);
@@ -116,6 +119,70 @@ namespace MyStoreFront1.Controllers
                 else
                 {
                     foreach (var error in userResult.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult passwordReset()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PasswordReset(string email)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                string token = await _signInManager.UserManager.GeneratePasswordResetTokenAsync(user);
+                token = System.Net.WebUtility.UrlEncode(token);
+
+                string currentUrl = Request.GetDisplayUrl();
+                System.Uri uri = new Uri(currentUrl);
+                string resetUrl = uri.GetLeftPart(UriPartial.Authority);
+                resetUrl += "/account/newpassword?id=" +token + "&email=" + email;
+
+                SendGrid.Helpers.Mail.SendGridMessage message = new SendGrid.Helpers.Mail.SendGridMessage();
+                message.AddTo(email);
+                message.Subject = "Your password reset token";
+                message.SetFrom("admin@SoundStore.com");
+                message.AddContent("text/plain", resetUrl);
+                message.AddContent("text/html", string.Format("<a href=\"{0}\">{0}</a>", resetUrl));
+                await _sendGridClient.SendEmailAsync(message);
+            }
+
+            //return RedirectToAction("Reset Sent");
+            return View();
+        }
+
+        public async Task<IActionResult> NewPassword(string email)
+        {
+            var user = await _signInManager.UserManager.FindByEmailAsync(email);
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NewPassword(string id, string email, string password)
+        {
+            string originalToken = id;
+            var user = await _signInManager.UserManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await _signInManager.UserManager.ResetPasswordAsync(user, originalToken, password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Login", new { resetSuccessful = true });
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(error.Code, error.Description);
                     }

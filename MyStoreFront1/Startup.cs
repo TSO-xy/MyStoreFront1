@@ -46,6 +46,16 @@ namespace MyStoreFront1
                 return new SendGrid.SendGridClient(Configuration["sendgridkey"]);
             });
 
+            services.AddTransient<Braintree.BraintreeGateway>((x) =>
+            {
+                return new Braintree.BraintreeGateway(
+                    Configuration["braintree.environment"],
+                    Configuration["braintree.merchantid"],
+                    Configuration["braintree.publickey"],
+                    Configuration["braintree.privatekey"]
+                );
+            });
+
 
         }
 

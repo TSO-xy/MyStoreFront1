@@ -11,6 +11,9 @@ namespace MyStoreFront1.Controllers
 {
     public class ShippingController : Controller
     {
+        private JoshTestContext _context;
+        private Braintree.BraintreeGateway _braintreeGateway;
+
         // GET: /<controller>/
         [HttpGet]
         public IActionResult Index()
@@ -21,16 +24,34 @@ namespace MyStoreFront1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(ShippingViewModel model)
+        public async Task<IActionResult> Index(ShippingViewModel model, string creditcardnumber, string creditcardname, string creditcardverificationvalue, string expirationmonth, string expirationyear)
         {
+            //System.Text.RegularExpressions.Regex = new System.Text.RegularExpressions.Regex();
+
+
             if (ModelState.IsValid)
             {
-                return this.RedirectToAction("Index", "Billing");
+                Braintree.TransactionRequest saleRequest = new Braintree.TransactionRequest();
+                saleRequest.Amount = 10;    //Hard-coded for now
+                saleRequest.CreditCard = new Braintree.TransactionCreditCardRequest
+                {
+                    CardholderName = creditcardname,
+                    CVV = creditcardverificationvalue,
+                    ExpirationMonth = expirationmonth,
+                    ExpirationYear = expirationyear,
+                    Number = creditcardnumber
+                };
+                var result = await _braintreeGateway.Transaction.SaleAsync(saleRequest);
+                if (result.IsSuccess())
+                {
+                    return this.RedirectToAction("Index", "Home");
+                }
+                foreach (var error in result.Errors.All())
+                {
+                    ModelState.AddModelError(error.Code.ToString(), error.Message);
+                }
             }
-            else 
-            {
                 return View(model);
-            }
         }
     }
 }

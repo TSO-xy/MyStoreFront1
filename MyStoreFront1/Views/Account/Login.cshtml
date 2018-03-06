@@ -4,13 +4,23 @@
 @{
     ViewData["Title"] = "Login";
 }
+<head>
+    <style>
+        a {
+            font-size: 0.8em;
+        }
+    </style>
+</head>
 
-<h2>Register</h2>
+<h2>Log In</h2>
 <div asp-validation-summary="All"></div>
 <form method="post" asp-action="login" asp-controller="account">
     <label>Username</label>
     <input type="text" name="username" required="required"/>
+    <br>
     <label>Password</label>
     <input type="password" name="password" required="required"/>
     <input type="submit" value="login" /> 
 </form>
+<br>
+<a asp-action="PasswordReset">Forgot your password?</a>
