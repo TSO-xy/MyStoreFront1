@@ -15,9 +15,10 @@
     }
 </div>
 <div class="row"> 
+    
 <form class="col-6" method="post" novalidate="novalidate">
 
-        @Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()
     <div class="form-group"> 
         <label>Street</label>
         <input type="text" class="form-control" name="street" required="required">
@@ -44,11 +45,23 @@
             <span class="invalid-feedback">Choose a delivery date.</span>
     </div>
        <br>
-       </form>>
-<!--    Validate Address    -->
-        <div>
+        <!--    Validate Address    -->
+        <!--<div>
             <button class="btn btn-dark">Validate Address</button> 
         </div>
+        <div class="col">
+            <div class="alert alert-warning" id="shippingNotValidated">
+                Not Yet Validated
+            </div>
+            <div class="alert alert-success" id="shippingValid" style="display:none">
+                Valid
+            </div>
+            <div class="alert alert-danger" id="shippingInvalid" style="display:none">
+                Invalid
+            </div>
+        </div>-->
+       </form>
+
         
 <!--        Billing         -->
   <form class="col-6" method="post" novalidate="novalidate">
@@ -76,23 +89,24 @@
             <option value="11">11</option>
             <option value="12">12</option>
     </div>
+     
     <div class="form-group">
-        <label for="expirationyear">Exp. Year</label>
-        <select name="expirationyear" class="form-control" required="required"/>
-            <option value="01">2018</option>
-            <option value="01">2019</option>
-            <option value="01">2020</option>
-            <option value="01">2021</option>
+        <label for="expirationmonth">Exp. Month</label>
+        <select name="expirationmonth" class="form-control" required="required"/>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
     </div>
     <div class="form-group">
         <label for="expirationmonth">CVV</label>
         <input name="cvv" class="form-control" required="required"/>
-    </div>        
-</form>
-</div>
-<div class="form-group">
+    </div> 
+        <div class="form-group">
     <input type="submit" class="btn btn-dark" value="Submit"/>
 </div>
+</form>
+    
+</div>
+
 @section Scripts{ 
     <script type="text/javascript">
         $(document).ready(() => {
@@ -104,6 +118,29 @@
                 $(event.target).addClass('was-validated');
             })
         });
+
+        $("#validateShipping").click((event) => {
+                $("#validateShipping").prop("disabled", "true");
+                $("#validating").show();
+                event.preventDefault();
+                event.stopPropagation();
+                var shippingAddress = $("#ShippingAddress").val();
+                var shippingCity = $("#ShippingCity").val();
+                var shippingState = $("#ShippingState").val();
+
+                $.getJSON("/delivery/validateaddress?street=" + shippingAddress + "&state=" + shippingState + "&city" + shippingCity, (data) => {
+                    if (data.length > 0) {
+                        $("#shippingInvalid").hide();
+                        $("#shippingValid").show();
+                    } else {
+                        $("#shippingInvalid").show();
+                        $("#shippingValid").hide();
+                    }
+                    $("#validateShipping").removeProp("disabled");
+                    $("#validating").hide();
+                    console.log(data);
+                })
+                $("#shippingNotValidated").hide();
         
     </script>
 }

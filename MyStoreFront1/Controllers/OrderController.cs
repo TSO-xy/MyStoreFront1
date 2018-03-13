@@ -24,7 +24,6 @@ namespace MyStoreFront1.Controllers
 
             if (Request.Cookies.TryGetValue("cartId", out cartId) && Guid.TryParse(cartId, out trackingNumber) && _context.Cart.Any(x => x.TrackingNumber == trackingNumber))
             {
-
                 var cart = _context.Cart.Include(x => x.CartProducts).ThenInclude(y => y.Products).Single(x => x.TrackingNumber == trackingNumber);
                 order.CartProducts = cart.CartProducts.ToArray();
             }
