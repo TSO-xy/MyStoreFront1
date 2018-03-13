@@ -28,6 +28,8 @@
             <p>@product.Price</p>
             <div class="form-group">
             <form asp-action="index" asp-controller="products" method="post">
+                       
+                        <input type="hidden" name="id" value="@product.Id" />
                <input type="submit" value="Add to cart" class="btn btn-dark" />
             </form>  
             </div>

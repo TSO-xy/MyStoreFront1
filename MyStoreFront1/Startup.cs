@@ -43,7 +43,8 @@ namespace MyStoreFront1
 
             services.AddTransient<SendGrid.SendGridClient>((x) =>
             {
-                return new SendGrid.SendGridClient(Configuration["sendgridkey"]);
+                return new SendGrid.SendGridClient(
+                    Configuration["sendgridkey"]);
             });
 
             services.AddTransient<Braintree.BraintreeGateway>((x) =>
@@ -56,6 +57,16 @@ namespace MyStoreFront1
                 );
             });
 
+            services.AddTransient<SmartyStreets.USStreetApi.Client>((x) =>
+            {
+                var client = new SmartyStreets.ClientBuilder(
+                    Configuration["smartystreets.authid"],
+                    Configuration["smartystreets.authtoken"])
+                        .BuildUsStreetApiClient();
+
+                return client;
+            });
+
 
         }
 
@@ -65,12 +76,13 @@ namespace MyStoreFront1
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink(); //I added this manually
-                app.UseDeveloperExceptionPage();
+
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseDeveloperExceptionPage();
             app.UseAuthentication();
             app.UseMvc();
             app.UseStaticFiles();

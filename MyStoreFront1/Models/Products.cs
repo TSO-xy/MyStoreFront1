@@ -7,7 +7,7 @@ namespace MyStoreFront1.Models
     {
         public Products()
         {
-            CartProducts = new HashSet<CartProducts>();
+            CartProducts = new HashSet<CartProduct>();
             OrderProducts = new HashSet<OrderProducts>();
             //ProductsGenres = new HashSet<ProductsGenres>();
             Reviews = new HashSet<Review>();
@@ -23,7 +23,7 @@ namespace MyStoreFront1.Models
         public DateTime? DateLastModified { get; set; }
         public Genres Genre { get; set; }
 
-        public ICollection<CartProducts> CartProducts { get; set; }
+        public ICollection<CartProduct> CartProducts { get; set; }
         public ICollection<OrderProducts> OrderProducts { get; set; }
         //public ICollection<ProductsGenres> ProductsGenres { get; set; }
         public ICollection<Review> Reviews { get; set; }

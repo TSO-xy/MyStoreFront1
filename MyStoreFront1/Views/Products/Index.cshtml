@@ -3,24 +3,24 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@foreach(var product in Model){
 <div class="row">
     <div class="col-4">
-        <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid" />
+        <img src="@product.ImageUrl" alt="@product.Name" class="img-fluid" />
     </div>
     <div class="col-8">
         <dl>
             <dt>Name</dt>
-            <dd>@Model.Name</dd>
+            <dd>@product.Name</dd>
             <dt>Description</dt>
-            <dd>@Model.Description</dd>
+            <dd>@product.Description</dd>
             <dt>Price</dt>
-            <dd>@(Model.Price.HasValue ? Model.Price.Value.ToString("c") : "No Price")</dd>
+            <dd>@(product.Price.HasValue ? product.Price.Value.ToString("c") : "No Price")</dd>
 <!--            <button class="btn btn-dark">Add to cart</button>-->
         </dl>
-        @if(Model.Reviews != null && Model.Reviews.Any())
+        @if(product.Reviews != null && product.Reviews.Any())
         {
-            foreach(var review in Model.Reviews)
+            foreach(var review in product.Reviews)
             {
                 <blockquote>
                     @review.Body - @review.Rating
@@ -28,8 +28,9 @@
             }
         }
         <form asp-action="index" asp-controller="products" method="post">
-<!--            <input type="hidden" name="name" value="@Model.Name">  -->
+            <input type="hidden" name="name" value="@product.Id">
             <input type="submit" value="Add to cart" class="btn btn-dark" />
         </form>
     </div>
 </div>
+}

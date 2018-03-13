@@ -7,13 +7,14 @@ namespace MyStoreFront1.Models
     {
         public Cart()
         {
-            CartProducts = new HashSet<CartProducts>();
+            CartProducts = new HashSet<CartProduct>();
         }
 
         public int Id { get; set; }
+        public Guid TrackingNumber { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateLastModified { get; set; }
 
-        public ICollection<CartProducts> CartProducts { get; set; }
+        public ICollection<CartProduct> CartProducts { get; set; }
     }
 }

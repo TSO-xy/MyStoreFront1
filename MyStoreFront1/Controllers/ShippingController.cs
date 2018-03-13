@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using MyStoreFront1.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,14 +13,33 @@ namespace MyStoreFront1.Controllers
     public class ShippingController : Controller
     {
         private JoshTestContext _context;
+        private SignInManager<ApplicationUser> _signInManager;
         private Braintree.BraintreeGateway _braintreeGateway;
+        private SmartyStreets.USStreetApi.Client _usStreetClient;
 
-        // GET: /<controller>/
+        public ShippingController(JoshTestContext context, Braintree.BraintreeGateway braintreeGateway, SignInManager<ApplicationUser> signInManager, SmartyStreets.USStreetApi.Client usStreetClient)
+        {
+            _context = context;
+            _braintreeGateway = braintreeGateway;
+            _signInManager = signInManager;
+            _usStreetClient = usStreetClient;
+        }
+
         [HttpGet]
         public IActionResult Index()
         {
             
             return View();
+        }
+
+        public IActionResult ValidateAddress(string street = "222 W Ontario", string city = "Chicago", string state = "IL")
+        {
+            SmartyStreets.USStreetApi.Lookup lookup = new SmartyStreets.USStreetApi.Lookup();
+            _usStreetClient.Send(lookup);
+            lookup.Street = street;
+            lookup.City = city;
+            lookup.State = state;
+            return Json(lookup);
         }
 
         [HttpPost]

@@ -14,6 +14,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.0" />
     <PackageReference Include="Sendgrid" Version="9.9.0" />
     <PackageReference Include="Braintree" Version="3.12.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -78,5 +79,10 @@
     <Compile Remove="Migrations\20180219182804_InitialCreate.cs" />
     <Compile Remove="Migrations\IdentityDbContextModelSnapshot.cs" />
     <Compile Remove="Models\ProductsGenres.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="smartystreets-dotnet-sdk">
+      <HintPath>bin\Debug\netcoreapp2.0\smartystreets-dotnet-sdk.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

@@ -21,7 +21,7 @@ namespace MyStoreFront1.Models
         public virtual DbSet<LineItem> LineItems { get; set; }
 
         public virtual DbSet<Cart> Cart { get; set; }
-        public virtual DbSet<CartProducts> CartProducts { get; set; }
+        public virtual DbSet<CartProduct> CartProducts { get; set; }
         public virtual DbSet<Genres> Genres { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderProducts> OrderProducts { get; set; }
@@ -47,7 +47,7 @@ namespace MyStoreFront1.Models
                     .HasDefaultValueSql("(getdate())");
             });
 
-            modelBuilder.Entity<CartProducts>(entity =>
+            modelBuilder.Entity<CartProduct>(entity =>
             {
                 entity.HasKey(e => new { e.CartId, e.ProductsId });
 

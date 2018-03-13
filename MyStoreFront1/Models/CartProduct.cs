@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MyStoreFront1.Models
 {
-    public partial class CartProducts
+    public partial class CartProduct
     {
         public int CartId { get; set; }
         public int ProductsId { get; set; }
