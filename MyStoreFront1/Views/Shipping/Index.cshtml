@@ -4,7 +4,7 @@
 @{
 }
 <h1>Shipping</h1>
-
+<hr />
 
 <div class="row col-12">
  @if (!this.ViewContext.ModelState.IsValid)
@@ -60,11 +60,11 @@
                 Invalid
             </div>
         </div>-->
-       </form>
+</form>
 
         
-<!--        Billing         -->
-  <form class="col-6" method="post" novalidate="novalidate">
+
+<form class="col-6" method="post" novalidate="novalidate">
     <div class="form-group">
         <label for="creditcardnumber">Credit Card</label>
         <input type="text" name="creditcardnumber" class="form-control" required="required"/>
@@ -74,8 +74,8 @@
         <input type="text" name="creditcardname" class="form-control" required="required"/>
     </div>
     <div class="form-group">
-        <label for="expirationmonth">Exp. Month</label>
-        <select name="expirationmonth" class="form-control" required="required"/>
+        <label for="ExpirationMonth">Exp. Month</label>
+        <select name="ExpirationMonth" class="form-control" required="required"
             <option value="01">01</option>
             <option value="02">02</option>
             <option value="03">03</option>
@@ -88,21 +88,24 @@
             <option value="10">10</option>
             <option value="11">11</option>
             <option value="12">12</option>
+            </select>
     </div>
-     
     <div class="form-group">
-        <label for="expirationmonth">Exp. Month</label>
-        <select name="expirationmonth" class="form-control" required="required"/>
+        <label>Exp. Year</label>
+        <select name="ExpirationYear" class="form-control" required="required" >
             <option value="2018">2018</option>
             <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            </select>
     </div>
     <div class="form-group">
-        <label for="expirationmonth">CVV</label>
-        <input name="cvv" class="form-control" required="required"/>
+        <label for="CVV">CVV</label>
+        <input name="CVV" class="form-control" required="required"/>
     </div> 
-        <div class="form-group">
-    <input type="submit" class="btn btn-dark" value="Submit"/>
-</div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-dark" value="Submit"/>
+    </div>
 </form>
     
 </div>

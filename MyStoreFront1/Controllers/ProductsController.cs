@@ -41,12 +41,12 @@ namespace MyStoreFront1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int id, bool extraParam = true)
+        public async Task<IActionResult> Index(int id, bool extraParam = true)
         {
             Guid cartId;
             Cart c;
             CartProduct p;
-             if(!Request.Cookies.ContainsKey("cartId") && Guid.TryParse(Request.Cookies["cartId"], out cartId) && _context.Cart.Any(x => x.TrackingNumber == cartId))
+             if(Request.Cookies.ContainsKey("cartId") && Guid.TryParse(Request.Cookies["cartId"], out cartId) && _context.Cart.Any(x => x.TrackingNumber == cartId))
             {
                 c = _context.Cart
                     .Include(x => x.CartProducts)
@@ -73,17 +73,11 @@ namespace MyStoreFront1.Controllers
             }
             p.Quantity++;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             Response.Cookies.Append("cartId", c.TrackingNumber.ToString(), new Microsoft.AspNetCore.Http.CookieOptions
                 {
                 Expires = DateTime.Now.AddMonths(1)
                 });
-
-            //Console.WriteLine("Added {0} to cart {1}", cartId);
-            //TODO: Need to create a record in the database that
-            //corresponds to this cart ID, and add the product to that cart
-
-
 
             return RedirectToAction("Index", "Order");
         }

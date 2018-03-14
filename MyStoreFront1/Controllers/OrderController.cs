@@ -31,10 +31,31 @@ namespace MyStoreFront1.Controllers
             return View(order);
 
         }
+        [HttpPost]
+        public IActionResult QuantityUpdate(int quantity, int productId)
+        {
+            string cartId;
+            Guid trackingNumber;
+            if (Request.Cookies.TryGetValue("cartId", out cartId) && Guid.TryParse(cartId, out trackingNumber) && _context.Cart.Any(x => x.TrackingNumber == trackingNumber))
+            {
+
+                var cart = _context.Cart.Include(x => x.CartProducts).ThenInclude(y => y.Products).Single(x => x.TrackingNumber == trackingNumber);
+                var cartItem = cart.CartProducts.Single(x => x.Products.Id == productId);
+                cartItem.Quantity = quantity;
+
+                if (cartItem.Quantity == 0)
+                {
+                    _context.CartProducts.Remove(cartItem);
+                }
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
 
         [HttpPost]
         public IActionResult Index(OrderViewModel model)
         {
+            _context.SaveChanges();
             return this.RedirectToAction("Index", "Shipping");
         }
     }
