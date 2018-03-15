@@ -2,18 +2,71 @@
     ViewData["Title"] = "Home";
 }
 <head>
-<style>
-    img {
-        max-height: 500px;
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+    <style>
+        img {
+            max-height: 500px;
+            }
+        body {
+            background-image: url("images/MainBackground1.jpg");
+            background-size: 100%;
+            }
+        h1 {
+            color: #eddec7;
+            font-family: 'Open Sans', 'Helvetica Nue', sans-serif;
+            font-size: 7.5em;
+            margin-top: 1em;
         }
-    body {
-        background-image: url("images/MainBackground.jpg");
-        background-size: 100%;
+        hr1 {
+            border-color: #eddec7
         }
-</style>
-</head>
+        .subtitle {
+            font-family: 'Merriweather', 'Helvetica Nue', sans-serif;
+            font-size: 1.1em;
+        }
+        .btn-lg {
+            background-color: #eddec7;
+            padding: 1em 2em;
+            font-size: 1.1em;
+            border-radius: 10px;
+        }
+        btn-lg:hover {
+            background-color: white;
+        }
 
-<button>Shop</button>
+        
+    </style>
+</head>
+<body>
+    <header class="masthead text-center text-white d-flex">
+      <div class="container my-auto">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <h1 class="text-uppercase">
+              <strong>Sound Store</strong>
+            </h1>
+            <hr class="hr1">
+          </div>
+          <div class="col-lg-8 mx-auto">
+            <p class="text-faded mb-5 subtitle">Elevate your production to its true potential.</p>
+            <form asp-action="Index" asp-controller="genres" method="post">
+                <input type="submit" value="Shop" class="btn btn-lg"/>
+            </form>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!--<div class="container">
+        <h1>Sound Store</h1>
+
+        <div class="col-md-4 text-center"> 
+            <button class="btn btn-warning">Browse</button>
+        </div>
+
+    </div>-->
+</body>
 
 <!--<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" role="listbox">
   <div class="carousel-inner">
@@ -36,7 +89,3 @@
     <span class="sr-only">Next</span>
   </a>
 </div>-->
-
-
-<div class="row">
-</div>

@@ -5,7 +5,7 @@
 <hr>
 @if (Model.CartProducts != null)
 {
-<form class="container" method="post">
+
     <div class="row">
         <!--<img src="product.ImageUrl" class="col-3 img-fluid" style="height: 25%">-->
         @foreach (var product in Model.CartProducts)
@@ -17,11 +17,13 @@
             </div>
         <div class="col-4">
         <dl>
-            <dt>Items</dt>
+            <dt>Item</dt>
             <dd>@product.Products.Name</dd>
+            <dt>Price</dt>
+            <dd>@product.Products.Price</dd>
 
         </dl>
-        <div class>
+        <div>
             <label for="orderQuantity"><b>Quantity</b></label>
                 <select class="form-control" name="quantity">
                   <option value="@product.Quantity">@product.Quantity</option>
@@ -31,18 +33,27 @@
                   <option value="5">5</option>
                 </select>
         </div>
+         <form method="post" asp-action="Remove" asp-controller="Order" class="form-inline">
+                <input name="productId" type="hidden" value="@product.Products.Id" />
+            <input type="submit" value="Remove from cart" class="btn btn-sm" />
+         </form>
         </div>
 
 
     </div>
         }
+
             </div>
     <br>
-    <div>
-        <form asp-action="Index" asp-controller="shipping" method="post">
-            <input type="submit" value="Checkout" class="btn btn-dark"/>
-        </form>
+    <div class="row">
+        <div class="col-2">
+            <form asp-action="Index" asp-controller="shipping" method="post">
+                <input type="submit" value="Checkout" class="btn btn-dark"/>
+            </form>
+        </div>
+        <div class="col-10">
+            <p>@Model.CartProducts.Sum(x => (x.Products.Price ?? 0m) * x.Quantity).ToString("c")</p>
+        </div>
     </div>
-    
-</form>
+
 }

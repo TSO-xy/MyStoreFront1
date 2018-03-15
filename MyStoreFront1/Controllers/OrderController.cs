@@ -32,7 +32,7 @@ namespace MyStoreFront1.Controllers
 
         }
         [HttpPost]
-        public IActionResult QuantityUpdate(int quantity, int productId)
+        public IActionResult Remove(int productId)
         {
             string cartId;
             Guid trackingNumber;
@@ -41,12 +41,10 @@ namespace MyStoreFront1.Controllers
 
                 var cart = _context.Cart.Include(x => x.CartProducts).ThenInclude(y => y.Products).Single(x => x.TrackingNumber == trackingNumber);
                 var cartItem = cart.CartProducts.Single(x => x.Products.Id == productId);
-                cartItem.Quantity = quantity;
 
-                if (cartItem.Quantity == 0)
-                {
-                    _context.CartProducts.Remove(cartItem);
-                }
+                cartItem.Quantity = 0;
+                _context.CartProducts.Remove(cartItem);
+
                 _context.SaveChanges();
             }
             return RedirectToAction("Index");
