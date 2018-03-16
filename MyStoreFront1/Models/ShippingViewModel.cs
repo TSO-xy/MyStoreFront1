@@ -7,6 +7,9 @@ namespace MyStoreFront1.Models
     {
         //Shipping
         [Required]
+        public string ShippingName { get; set; }
+
+        [Required]
         public string ShippingStreet { get; set; }
 
         [Required]
@@ -20,7 +23,7 @@ namespace MyStoreFront1.Models
         public int? ShippingZipCode { get; set; }
 
         [Required]
-        public DateTime? ShippingDate { get; set; }
+        public string DeliveryMethod { get; set; }
 
         //Billing
         [Required]
@@ -50,7 +53,7 @@ namespace MyStoreFront1.Models
 
         [System.ComponentModel.DataAnnotations.RegularExpression(@"^\d{5}(?:[-\s]\d{4})?$", ErrorMessage = "Please use a 5 or 9 digit zip code")]
         [Required]
-        public string BillingZip { get; set; }
+        public string BillingZipCode { get; set; }
 
         public SavedCreditCard[] SavedCreditCards { get; set; }
 

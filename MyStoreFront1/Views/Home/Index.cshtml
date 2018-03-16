@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home";
 }
 <head>
-    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    
     <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
     <style>
@@ -26,14 +26,16 @@
             font-family: 'Merriweather', 'Helvetica Nue', sans-serif;
             font-size: 1.1em;
         }
-        .btn-lg {
+        .btn {
             background-color: #eddec7;
             padding: 1em 2em;
             font-size: 1.1em;
             border-radius: 10px;
         }
-        btn-lg:hover {
+        .btn:hover {
             background-color: white;
+            padding: 1.3em 2.5em;
+            font-size: 1em;
         }
 
         
@@ -52,7 +54,7 @@
           <div class="col-lg-8 mx-auto">
             <p class="text-faded mb-5 subtitle">Elevate your production to its true potential.</p>
             <form asp-action="Index" asp-controller="genres" method="post">
-                <input type="submit" value="Shop" class="btn btn-lg"/>
+                <input type="submit" value="Shop" class="btn"/>
             </form>
           </div>
         </div>

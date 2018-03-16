@@ -6,8 +6,11 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+}
 
-
+.nav-item {
+    color: #eddec7;
+    font-family: Helvetica
 }
 
 /* Carousel */

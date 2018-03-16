@@ -13,7 +13,8 @@ namespace MyStoreFront1.Controllers
 {
     public class ShippingController : Controller
     {
-        private OrderViewModel model;
+        private OrderViewModel orderModel;
+        private ShippingViewModel model;
         private JoshTestContext _context;
         private SignInManager<ApplicationUser> _signInManager;
         private Braintree.BraintreeGateway _braintreeGateway;
@@ -30,8 +31,17 @@ namespace MyStoreFront1.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            
-            return View();
+            string cartId;
+            Guid trackingNumber;
+            OrderViewModel order = new OrderViewModel();
+
+            if (Request.Cookies.TryGetValue("cartId", out cartId) && Guid.TryParse(cartId, out trackingNumber) && _context.Cart.Any(x => x.TrackingNumber == trackingNumber))
+            {
+                var cart = _context.Cart.Include(x => x.CartProducts).ThenInclude(y => y.Products).Single(x => x.TrackingNumber == trackingNumber);
+                order.CartProducts = cart.CartProducts.ToArray();
+            }
+
+            return View(order);
         }
 
         public IActionResult ValidateAddress(string street = "222 W Ontario", string city = "Chicago", string state = "IL")
@@ -46,7 +56,7 @@ namespace MyStoreFront1.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(ShippingViewModel model, string creditcardnumber, string creditcardname, string creditcardverificationvalue, string expirationmonth, string expirationyear)
+        public async Task<IActionResult> Index(ShippingViewModel model)
         {
             //System.Text.RegularExpressions.Regex = new System.Text.RegularExpressions.Regex();
 
@@ -57,14 +67,26 @@ namespace MyStoreFront1.Controllers
                 saleRequest.Amount = 10;    //Hard-coded for now
                 saleRequest.CreditCard = new Braintree.TransactionCreditCardRequest
                 {
-                    CardholderName = creditcardname,
-                    CVV = creditcardverificationvalue,
-                    ExpirationMonth = expirationmonth,
-                    ExpirationYear = expirationyear,
-                    Number = creditcardnumber,
+                    CardholderName = model.CreditCardName,
+                    CVV = model.CVV,
+                    ExpirationMonth = model.ExpMonth,
+                    ExpirationYear = model.ExpYear,
+                    Number = model.CreditCardNumber
                         
                 };
+                saleRequest.BillingAddress = new Braintree.AddressRequest
+                {
+                    StreetAddress = model.BillingStreet,
+                    PostalCode = model.BillingZipCode,
+                    Region = model.BillingState,
+                    Locality = model.BillingCity,
+                    CountryName = "United States of America",
+                    CountryCodeAlpha2 = "US",
+                    CountryCodeAlpha3 = "USA",
+                    CountryCodeNumeric = "840"
+                };
                 var result = await _braintreeGateway.Transaction.SaleAsync(saleRequest);
+
                 if (result.IsSuccess())
                 {
                     return this.RedirectToAction("Index", "Home");

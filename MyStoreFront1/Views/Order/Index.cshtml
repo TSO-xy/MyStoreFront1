@@ -47,12 +47,12 @@
     <br>
     <div class="row">
         <div class="col-2">
-            <form asp-action="Index" asp-controller="shipping" method="post">
+            <form asp-action="Index" asp-controller="shipping" method="get">
                 <input type="submit" value="Checkout" class="btn btn-dark"/>
             </form>
         </div>
         <div class="col-10">
-            <p>@Model.CartProducts.Sum(x => (x.Products.Price ?? 0m) * x.Quantity).ToString("c")</p>
+            <p>Subtotal: @Model.CartProducts.Sum(x => (x.Products.Price ?? 0m) * x.Quantity).ToString("c")</p>
         </div>
     </div>
 
